@@ -4,25 +4,21 @@ import { removeItem, updateQuantity } from './CartSlice';
 import './CartItem.css';
 
 const CartItem = ({ onContinueShopping }) => {
-  const cart = useSelector(state => state.cart.items);
   const dispatch = useDispatch();
+  const cart = useSelector(state => state.cart.items);
 
   // Calculate total amount for all products in the cart
   const calculateTotalAmount = () => {
- 
   };
 
   const handleContinueShopping = (e) => {
-   
   };
-
-
 
   const handleIncrement = (item) => {
   };
 
   const handleDecrement = (item) => {
-   
+
   };
 
   const handleRemove = (item) => {
@@ -64,5 +60,3 @@ const CartItem = ({ onContinueShopping }) => {
 };
 
 export default CartItem;
-
-
