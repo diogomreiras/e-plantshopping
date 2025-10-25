@@ -11,11 +11,10 @@ import currencyObj from "./data/currency.json"
 function ProductList({ onHomeClick }) {
     const [showCart, setShowCart] = useState(false);
     const [showPlants, setShowPlants] = useState(false); // State to control the visibility of the Home or Plants page
-    const [addedToCart, setAddedToCart] = useState({});
     const [currencyIndex, setCurrencyIndex] = useState(0);
 
     const dispatch = useDispatch();
-    const cart = useSelector((state) => state.cart);
+    const cart = useSelector((state) => state.cart.items);
 
 
     const styleObj = {
@@ -65,11 +64,6 @@ function ProductList({ onHomeClick }) {
 
     const handleAddToCart = (plant) => {
         dispatch(addItem(plant)); // Dispatch the action to add the plant to the cart (Redux action)
-
-        setAddedToCart((prevState) => ({ // Update the local state to reflect that the plant has been added
-            ...prevState, // Spread the previous state to retain existing entries
-            [plant.name]: true, // Set the current plant's name as a key with value 'true' to mark it as added
-        }));
     }
 
     const handleCurrencyChange = (e) => {
@@ -87,7 +81,6 @@ function ProductList({ onHomeClick }) {
                         <i style={{ color: "white" }}>Where Green Meets Serenity</i>
                     </div>
                 </a>
-                {/* <div style={styleObjUl}> */}
                 <a href="#" onClick={(e) => handlePlantsClick(e)} style={styleA}>Plants</a>
                 <div className="cartSection">
                     <div>
@@ -103,6 +96,7 @@ function ProductList({ onHomeClick }) {
                         </select>
                     </div>
                     <div>
+                        {/* Cart icon */}
                         <a href="#" onClick={(e) => handleCartClick(e)} style={styleA}>
                             <h1 className="cart">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" id="IconChangeColor" height="68" width="68">
@@ -115,7 +109,6 @@ function ProductList({ onHomeClick }) {
                         </a>
                     </div>
                 </div>
-                {/* </div> */}
             </div >
             {showCart ? (
                 <CartItem onContinueShopping={handleContinueShopping} currency={currencyObj[currencyIndex]} />
@@ -134,8 +127,7 @@ function ProductList({ onHomeClick }) {
                                             src={plant.image} // Display the plant image
                                             alt={plant.name} // Alt text for accessibility
                                         />
-                                        <div className="product-title">{plant.name}</div> {/* Display plant name */}
-                                        {/* Display other plant details like description and cost */}
+                                        <div className="product-title">{plant.name}</div>
                                         <div className="product-description">{plant.description}</div> {/* Display plant description */}
                                         <div className="product-cost">
                                             {formatCost(
@@ -143,12 +135,13 @@ function ProductList({ onHomeClick }) {
                                                 currencyObj[currencyIndex].symbol,
                                                 currencyObj[currencyIndex].decimals
                                             )}
-                                        </div> {/* Display plant cost */}
+                                        </div>
                                         <button
-                                            className="product-button"
-                                            onClick={() => handleAddToCart(plant)} // Handle adding plant to cart
+                                            className={`product-button ${cart[plant.name] ? "added-to-cart" : ""}`}
+                                            onClick={() => handleAddToCart(plant)}
+                                            disabled={cart[plant.name]}
                                         >
-                                            Add to Cart
+                                            {cart[plant.name] ? "Added to Cart" : "Add to Cart"}
                                         </button>
                                     </div>
                                 ))}
