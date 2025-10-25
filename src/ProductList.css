@@ -135,7 +135,7 @@ body {
     border-radius: 0 0 0 5px;
 }
 
-.tag_home_link {
+.tag-home-link {
     /* display: flex;
     flex-direction: column;
     align-items: center;
@@ -146,7 +146,7 @@ body {
     font-size: 20px;
 }
 
-.tag_home_link h3 {
+.tag-home-link h3 {
     font-size: 30px;
 }
 
@@ -170,7 +170,7 @@ body {
     display: flex;
 }
 
-.cart_quantity_count {
+.cart-quantity-count {
     margin-top: 16px;
     /* background-color: red; */
     margin-left: 27px;
@@ -179,14 +179,14 @@ body {
 
 }
 
-.plantname_heading {
+.plantname-heading {
     display: flex;
     align-items: center;
     justify-content: center;
     /* background-color: yellow; */
 }
 
-.plant_heading {
+.plant-heading {
     width: 400px;
     text-align: center;
     margin: 20px;

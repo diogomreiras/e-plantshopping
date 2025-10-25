@@ -232,12 +232,12 @@
   margin-top: 20px;
 }
 
-.total_cart_amount {
+.total-cart-amount {
   font-size: 20px;
   font-weight: 900;
 }
 
-.continue_shopping_btn {
+.continue-shopping-btn {
   margin-top: -50px;
 }
 
@@ -247,7 +247,7 @@
     /* Reduce padding */
   }
 
-  .total_cart_amount {
+  .total-cart-amount {
     font-size: 18px;
     /* Reduce font size */
   }
