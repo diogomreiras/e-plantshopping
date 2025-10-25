@@ -1,0 +1,33 @@
+[
+    {
+        "name": "Euro",
+        "symbol": "€",
+        "factor": 0.85
+    },
+    {
+        "name": "US Dollar",
+        "symbol": "$",
+        "factor": 1
+    },
+    {
+        "name": "British Pound",
+        "symbol": "£",
+        "factor": 0.75
+    },
+    {
+        "name": "Japanese Yen",
+        "symbol": "¥",
+        "factor": 151,
+        "decimals": 0
+    },
+    {
+        "name": "Australian Dollar",
+        "symbol": "A$",
+        "factor": 1.54
+    },
+    {
+        "name": "Indian Rupee",
+        "symbol": "Rs",
+        "factor": 88.04
+    }
+]

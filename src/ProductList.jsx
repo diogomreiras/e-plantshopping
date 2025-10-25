@@ -1,13 +1,22 @@
-import React, { useState, useEffect } from "react";
+import { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+
 import "./ProductList.css"
 import CartItem from "./CartItem";
-import { formatCost, currencyArray, plantsArray } from "./helpers";
+import { addItem } from "./CartSlice";
+import { formatCost } from "./helpers";
+import plantObj from "./data/plants.json"
+import currencyObj from "./data/currency.json"
 
 function ProductList({ onHomeClick }) {
     const [showCart, setShowCart] = useState(false);
-    const [showPlants, setShowPlants] = useState(false); // State to control the visibility of the About Us page
+    const [showPlants, setShowPlants] = useState(false); // State to control the visibility of the Home or Plants page
     const [addedToCart, setAddedToCart] = useState({});
     const [currencyIndex, setCurrencyIndex] = useState(0);
+
+    const dispatch = useDispatch();
+    const cart = useSelector((state) => state.cart);
+
 
     const styleObj = {
         backgroundColor: "#4CAF50",
@@ -33,16 +42,20 @@ function ProductList({ onHomeClick }) {
     const handleHomeClick = (e) => {
         e.preventDefault();
         onHomeClick();
+        setShowPlants(false); // Hide plants
+        setShowCart(false); // Hide the cart
     };
 
     const handleCartClick = (e) => {
         e.preventDefault();
-        setShowCart(true); // Set showCart to true when cart icon is clicked
+        setShowPlants(false); // Hide plants
+        setShowCart(true); // Show the shopping cart
     };
+
     const handlePlantsClick = (e) => {
         e.preventDefault();
-        setShowPlants(true); // Set showAboutUs to true when "About Us" link is clicked
-        setShowCart(false); // Hide the cart when navigating to About Us
+        setShowPlants(true); // Show plants
+        setShowCart(false); // Hide the cart
     };
 
     const handleContinueShopping = (e) => {
@@ -50,13 +63,18 @@ function ProductList({ onHomeClick }) {
         setShowCart(false);
     };
 
-    const handleAddToCart = () => {
+    const handleAddToCart = (plant) => {
+        dispatch(addItem(plant)); // Dispatch the action to add the plant to the cart (Redux action)
+
+        setAddedToCart((prevState) => ({ // Update the local state to reflect that the plant has been added
+            ...prevState, // Spread the previous state to retain existing entries
+            [plant.name]: true, // Set the current plant's name as a key with value 'true' to mark it as added
+        }));
     }
 
     const handleCurrencyChange = (e) => {
-        console.log("selectedIndex", e.target.selectedIndex);
-        const currency = e.target.selectedIndex;
-        setCurrencyIndex(currency);
+        const currencyIndex = e.target.selectedIndex;
+        setCurrencyIndex(currencyIndex);
     };
 
     return (
@@ -74,12 +92,11 @@ function ProductList({ onHomeClick }) {
                 <div className="cartSection">
                     <div>
                         {/* Currency Dropdown */}
-                        {console.log(`currencyIndex: ${currencyIndex}`)}
-                        <select id="currency" className="selectCurrency" value={currencyArray[currencyIndex].symbol} onChange={handleCurrencyChange}>
-                            {currencyArray.map((currency) => {
+                        <select id="currency" className="selectCurrency" value={currencyObj[currencyIndex].symbol} onChange={handleCurrencyChange}>
+                            {currencyObj.map((currency) => {
                                 return (
                                     <option key={currency.name} value={currency.symbol}>
-                                        {`${currency.symbol}`}
+                                        {`${currency.symbol} - ${currency.name}`}
                                     </option>
                                 )
                             })}
@@ -101,13 +118,13 @@ function ProductList({ onHomeClick }) {
                 {/* </div> */}
             </div >
             {showCart ? (
-                <CartItem onContinueShopping={handleContinueShopping} currencySymbol={currencyArray[currencyIndex].symbol} />
+                <CartItem onContinueShopping={handleContinueShopping} currency={currencyObj[currencyIndex]} />
             ) : (
                 <div className="product-grid">
-                    {plantsArray.map((category, index) => ( // Loop through each category in plantsArray
+                    {plantObj.map((category, index) => ( // Loop through each category in plantObj
                         <div key={index}> {/* Unique key for each category div */}
                             <h1>
-                                <div>{category.category}</div> {/* Display the category name */}
+                                <div style={{ padding: "20px" }}>{category.category}</div> {/* Display the category name */}
                             </h1>
                             <div className="product-list"> {/* Container for the list of plant cards */}
                                 {category.plants.map((plant, plantIndex) => ( // Loop through each plant in the current category
@@ -120,7 +137,13 @@ function ProductList({ onHomeClick }) {
                                         <div className="product-title">{plant.name}</div> {/* Display plant name */}
                                         {/* Display other plant details like description and cost */}
                                         <div className="product-description">{plant.description}</div> {/* Display plant description */}
-                                        <div className="product-cost">{formatCost(plant.cost, currencyArray[currencyIndex].symbol)}</div> {/* Display plant cost */}
+                                        <div className="product-cost">
+                                            {formatCost(
+                                                plant.cost * (currencyObj[currencyIndex].factor || 1),
+                                                currencyObj[currencyIndex].symbol,
+                                                currencyObj[currencyIndex].decimals
+                                            )}
+                                        </div> {/* Display plant cost */}
                                         <button
                                             className="product-button"
                                             onClick={() => handleAddToCart(plant)} // Handle adding plant to cart
@@ -132,10 +155,13 @@ function ProductList({ onHomeClick }) {
                             </div>
                         </div>
                     ))}
+                    <button className="get-started-button" onClick={(e) => handleAddToCart(e)}>Go To Cart</button>
                 </div>
             )}
         </div >
     );
 }
+
+export const { handlePlantsClick } = ProductList;
 
 export default ProductList;
