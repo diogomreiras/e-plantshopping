@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
-import "./ProductList.css"
 import CartItem from "./CartItem";
 import { addItem } from "./CartSlice";
 import { formatCost } from "./helpers";
 import plantObj from "./data/plants.json"
 import currencyObj from "./data/currency.json"
+import "./ProductList.css"
 
 function ProductList({ onHomeClick }) {
     const [showCart, setShowCart] = useState(false);
@@ -71,14 +71,7 @@ function ProductList({ onHomeClick }) {
         setCurrencyIndex(currencyIndex);
     };
 
-    const calculateTotalPlants = () => {
-        let totalAmount = 0;
-
-        for (const plantName in cart) {
-            totalAmount += cart[plantName].quantity;
-        }
-        return totalAmount
-    };
+    const calculateTotalPlants = () => Object.values(cart).reduce((total, plant) => total + plant.quantity, 0);
 
     return (
         <div>
