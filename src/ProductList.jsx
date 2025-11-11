@@ -151,7 +151,7 @@ function ProductList({ onHomeClick }) {
                             </div>
                         </div>
                     ))}
-                    <button className="get-started-button" onClick={(e) => handleAddToCart(e)}>Go To Cart</button>
+                    <button className="get-started-button" onClick={(e) => handleCartClick(e)}>Go To Cart</button>
                 </div>
             )}
         </div >
